@@ -48,7 +48,7 @@ class App extends React.Component {
               צריך לענות מהר
             </Typography>
             <Typography variant="subtitle1">
-              אסור להתמעמע
+              אסור להתמהמה
             </Typography>
             <Typography variant="subtitle1" gutterBottom>
               אסור לחזור על תשובות
