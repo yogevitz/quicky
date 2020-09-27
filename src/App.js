@@ -2,16 +2,16 @@ import React from 'react';
 import logo from './logo.png';
 import './App.css';
 import { Button, Drawer, Typography } from '@material-ui/core';
-import questions from './questions.json';
+import QUESTIONS from './questions.json';
 
-const keys = Object.keys(questions);
-const colors = ['#34232f', '#3E65F0', '#A00336', '#4F7026', '#73513C'];
+const KEYS = Object.keys(QUESTIONS);
+const COLORS = ['#34232f', '#3E65F0', '#A00336', '#4F7026', '#73513C'];
 
 class App extends React.Component {
   state = {
     inGame: false,
     about: false,
-    color: colors[0],
+    color: COLORS[0],
   };
 
   start = () => {
@@ -20,8 +20,8 @@ class App extends React.Component {
   };
 
   next = () => {
-    const rndKeyIndex = Math.floor(Math.random() * keys.length);
-    const question = questions[rndKeyIndex];
+    const rndKeyIndex = Math.floor(Math.random() * KEYS.length);
+    const question = QUESTIONS[rndKeyIndex];
     this.setState({ question });
   };
 
@@ -29,36 +29,43 @@ class App extends React.Component {
     const { about, color } = this.state;
     let rndColorIndex, newColor;
     if (about) {
-      rndColorIndex = Math.floor(Math.random() * colors.length);
-      newColor = colors[rndColorIndex];
+      rndColorIndex = Math.floor(Math.random() * COLORS.length);
+      newColor = COLORS[rndColorIndex];
     }
     this.setState({ about: !about, color: about ? newColor : color });
   };
 
-  render() {
-    const { inGame, question, about, color } = this.state;
+  renderDrawer = () => {
+    const { about } = this.state;
     return (
-      <div className="App">
-        <Drawer anchor="bottom" open={about} onClose={() => this.toggleAbout()}>
-          <div dir="rtl" className="about">
-            <Typography variant="subtitle1">
-              יש שאלות
-            </Typography>
-            <Typography variant="subtitle1">
-              צריך לענות מהר
-            </Typography>
-            <Typography variant="subtitle1">
-              אסור להתמהמה
-            </Typography>
-            <Typography variant="subtitle1" gutterBottom>
-              אסור לחזור על תשובות
-            </Typography>
-            <Typography variant="subtitle1">
-              <div dir="ltr">© GangBang Productions</div>
-            </Typography>
-          </div>
-        </Drawer>
-        <header className="App-header" style={{ backgroundColor: color }}>
+      <Drawer anchor="bottom" open={about} onClose={() => this.toggleAbout()}>
+        <div dir="rtl" className="about">
+          <Typography variant="subtitle1">
+            יש שאלות
+          </Typography>
+          <Typography variant="subtitle1">
+            צריך לענות מהר
+          </Typography>
+          <Typography variant="subtitle1">
+            אסור להתמהמה
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom style={{ paddingBottom: '20px' }}>
+            אסור לחזור על תשובות
+          </Typography>
+          <Typography variant="subtitle1">
+            GANGBANG PRODUCTIONS
+          </Typography>
+        </div>
+      </Drawer>
+    );
+  };
+
+  render() {
+    const { inGame, question, color } = this.state;
+    return (
+      <div className="App" style={{ backgroundColor: color }}>
+        {this.renderDrawer()}
+        <header className="App-header">
           <img
             height="197px"
             width="300px"
@@ -77,7 +84,7 @@ class App extends React.Component {
                 </Button>
               </React.Fragment>
             ) : (
-              <Button onClick={() => this.start()} variant="outlined" color="secondary" size="large">
+              <Button onClick={() => this.start()} variant="contained" color="primary" size="large">
                 Start
               </Button>
             )}
