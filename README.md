@@ -1,6 +1,6 @@
 # Quicky
 
-www.quicky-game.herokuapp.com
+https://quicky-game.herokuapp.com/
 
 A simple, and yet psychological, game to play with friends.
 
