@@ -1,5 +1,7 @@
 # Quicky
 
+www.quicky-game.herokuapp.com
+
 A simple, and yet psychological, game to play with friends.
 
 ![](https://media.giphy.com/media/kyWOrpcC7scWbhWnlh/giphy.gif)
