@@ -14,13 +14,21 @@ class App extends React.Component {
     color: COLORS[0],
   };
 
+  asked = [];
+
   start = () => {
     this.setState({ inGame: true });
     this.next();
   };
 
+  getRandomKey = () => Math.floor(Math.random() * KEYS.length);
+
   next = () => {
-    const rndKeyIndex = Math.floor(Math.random() * KEYS.length);
+    let rndKeyIndex = this.getRandomKey();
+    while (this.asked.includes(rndKeyIndex)) {
+      rndKeyIndex = this.getRandomKey();
+    }
+    this.asked.push(rndKeyIndex);
     const question = QUESTIONS[rndKeyIndex];
     this.setState({ question });
   };
