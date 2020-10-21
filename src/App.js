@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from './logo.png';
 import './App.css';
-import { Button, Drawer, Typography } from '@material-ui/core';
+import { Button, Drawer, Typography, IconButton } from '@material-ui/core';
+import { GitHub, MailOutline } from '@material-ui/icons';
 import QUESTIONS from './questions.json';
 
 const KEYS = Object.keys(QUESTIONS);
@@ -43,6 +44,8 @@ class App extends React.Component {
     this.setState({ about: !about, color: about ? newColor : color });
   };
 
+  openMail = () => window.open('mailto:yogevshlomovitz@gmail.com?subject=Quicky');
+
   renderDrawer = () => {
     const { about } = this.state;
     return (
@@ -60,13 +63,14 @@ class App extends React.Component {
             </Typography>
           </div>
           <Typography variant="subtitle1">
-            אסור להתמהמה
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom style={{ paddingBottom: '20px' }}>
-            אסור לחזור על תשובות
-          </Typography>
-          <Typography variant="subtitle1">
-            GANGBANG PRODUCTIONS
+            <IconButton onClick={this.openMail} style={{ color: 'white' }}>
+              <MailOutline />
+            </IconButton>
+            <a href={'https://github.com/yogevitz/quicky'}>
+              <IconButton style={{ color: 'white' }}>
+                <GitHub />
+              </IconButton>
+            </a>
           </Typography>
         </div>
       </Drawer>
