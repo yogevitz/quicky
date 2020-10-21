@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.png';
 import './App.css';
 import { Button, Drawer, Typography, IconButton } from '@material-ui/core';
-import { GitHub, MailOutline } from '@material-ui/icons';
+import { GitHub, MailOutline, InfoOutlined } from '@material-ui/icons';
 import QUESTIONS from './questions.json';
 
 const KEYS = Object.keys(QUESTIONS);
@@ -106,9 +106,9 @@ class App extends React.Component {
               </Button>
             )}
             <p>
-              <Button onClick={this.toggleAbout}>
-                WTF
-              </Button>
+              <IconButton onClick={this.toggleAbout} style={{ color: 'white' }}>
+                <InfoOutlined />
+              </IconButton>
             </p>
           </div>
         </header>
