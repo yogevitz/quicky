@@ -48,12 +48,17 @@ class App extends React.Component {
     return (
       <Drawer anchor="bottom" open={about} onClose={() => this.toggleAbout()}>
         <div dir="rtl" className="about">
-          <Typography variant="subtitle1">
-            יש שאלות
-          </Typography>
-          <Typography variant="subtitle1">
-            צריך לענות מהר
-          </Typography>
+          <div className="instructions">
+            <Typography variant="subtitle1">
+              <b>הוראות</b>
+            </Typography>
+            <Typography variant="subtitle1">
+              בכל סיבוב, חבר אחד שואל שאלות ברצף וחבר אחר עונה. העונה צריך לענות את הדבר הראשון שקופץ לו לראש - בלי להתמהמה, בלי לחזור על תשובות ובלי להשתמש במילים מהשאלה.
+            </Typography>
+            <Typography variant="subtitle1">
+              העונה נפסל? מחליפים תפקידים!
+            </Typography>
+          </div>
           <Typography variant="subtitle1">
             אסור להתמהמה
           </Typography>
