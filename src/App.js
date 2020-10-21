@@ -46,7 +46,7 @@ class App extends React.Component {
   renderDrawer = () => {
     const { about } = this.state;
     return (
-      <Drawer anchor="bottom" open={about} onClose={() => this.toggleAbout()}>
+      <Drawer anchor="bottom" open={about} onClose={this.toggleAbout}>
         <div dir="rtl" className="about">
           <div className="instructions">
             <Typography variant="subtitle1">
@@ -92,17 +92,17 @@ class App extends React.Component {
                 <div dir="rtl" className="question">
                   <p>{question}</p>
                 </div>
-                <Button onClick={() => this.next()} variant="contained" color="secondary" size="large">
+                <Button onClick={this.next} variant="contained" color="secondary" size="large">
                   Next
                 </Button>
               </React.Fragment>
             ) : (
-              <Button onClick={() => this.start()} variant="contained" color="primary" size="large">
+              <Button onClick={this.start} variant="contained" color="primary" size="large">
                 Start
               </Button>
             )}
             <p>
-              <Button onClick={() => this.toggleAbout()}>
+              <Button onClick={this.toggleAbout}>
                 WTF
               </Button>
             </p>
