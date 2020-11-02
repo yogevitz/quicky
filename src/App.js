@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.png';
 import './App.css';
-import { Button, Drawer, Typography, IconButton } from '@material-ui/core';
+import { Button, Drawer, Typography, IconButton, Grid } from '@material-ui/core';
 import { GitHub, MailOutline, InfoOutlined } from '@material-ui/icons';
 import QUESTIONS from './questions.json';
 
@@ -13,6 +13,7 @@ class App extends React.Component {
     inGame: false,
     about: false,
     color: COLORS[0],
+    count: -1,
   };
 
   asked = [];
@@ -25,13 +26,20 @@ class App extends React.Component {
   getRandomKey = () => Math.floor(Math.random() * KEYS.length);
 
   next = () => {
+    const { count } = this.state;
     let rndKeyIndex = this.getRandomKey();
     while (this.asked.includes(rndKeyIndex)) {
       rndKeyIndex = this.getRandomKey();
     }
     this.asked.push(rndKeyIndex);
     const question = QUESTIONS[rndKeyIndex];
-    this.setState({ question });
+    this.setState({ question, count: count + 1 });
+  };
+
+  fail = () => {
+    const { count } = this.state;
+    alert(`Wak Wak Wak\nAnswered ${count} questions!`);
+    this.setState({ inGame: false, count: -1 });
   };
 
   toggleAbout = () => {
@@ -78,7 +86,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { inGame, question, color } = this.state;
+    const { inGame, question, color, count } = this.state;
     return (
       <div className="App" style={{ backgroundColor: color }}>
         {this.renderDrawer()}
@@ -93,12 +101,26 @@ class App extends React.Component {
           <div>
             {inGame ? (
               <React.Fragment>
+                <Typography variant="subtitle1">
+                  <b>{count}</b>
+                </Typography>
                 <div dir="rtl" className="question">
                   <p>{question}</p>
                 </div>
-                <Button onClick={this.next} variant="contained" color="secondary" size="large">
-                  Next
-                </Button>
+                <div className="buttons">
+                  <Grid container spacing={3} alignItems="center" justify="center">
+                    <Grid item xs={12}>
+                      <Button onClick={this.next} variant="contained" color="primary" size="large">
+                        Next
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button onClick={this.fail} variant="contained" color="secondary" size="medium">
+                        Fail
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </div>
               </React.Fragment>
             ) : (
               <Button onClick={this.start} variant="contained" color="primary" size="large">
