@@ -1,7 +1,7 @@
 import React from 'react';
-import logo from './logo.png';
-import questions from './questions.json';
-import { COLORS, GITHUB_LINK, MAIL_TO } from './constants';
+import logo from '../assets/logo.png';
+import questions from '../assets/questions.json';
+import { COLORS, GITHUB_LINK, MAIL_TO } from '../constants';
 import { Drawer, Button, Typography, IconButton, Grid } from '@material-ui/core';
 import { GitHub, MailOutline, InfoOutlined } from '@material-ui/icons';
 import './App.css';
