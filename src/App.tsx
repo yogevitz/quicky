@@ -1,63 +1,60 @@
 import React from 'react';
 import logo from './logo.png';
-import './App.css';
-import { Button, Drawer, Typography, IconButton, Grid } from '@material-ui/core';
+import questions from './questions.json';
+import { COLORS, GITHUB_LINK, MAIL_TO } from './constants';
+import { Drawer, Button, Typography, IconButton, Grid } from '@material-ui/core';
 import { GitHub, MailOutline, InfoOutlined } from '@material-ui/icons';
-import QUESTIONS from './questions.json';
-
-const KEYS = Object.keys(QUESTIONS);
-const COLORS = ['#34232f', '#3E65F0', '#A00336', '#4F7026', '#73513C'];
+import './App.css';
 
 class App extends React.Component {
   state = {
     inGame: false,
-    about: false,
+    question: null,
+    isAbout: false,
     color: COLORS[0],
     count: -1,
   };
 
-  asked = [];
+  asked: number[] = [];
 
-  start = () => {
+  onStart = () => {
     this.setState({ inGame: true });
-    this.next();
+    this.onNext();
   };
 
-  getRandomKey = () => Math.floor(Math.random() * KEYS.length);
-
-  next = () => {
+  onNext = () => {
     const { count } = this.state;
-    let rndKeyIndex = this.getRandomKey();
-    while (this.asked.includes(rndKeyIndex)) {
-      rndKeyIndex = this.getRandomKey();
+    let num = this._getRandomNum(questions.length);
+    while (this.asked.includes(num)) {
+      num = this._getRandomNum(questions.length);
     }
-    this.asked.push(rndKeyIndex);
-    const question = QUESTIONS[rndKeyIndex];
+    this.asked.push(num);
+    const question: string = questions[num];
     this.setState({ question, count: count + 1 });
   };
 
-  fail = () => {
+  onFail = () => {
     const { count } = this.state;
-    alert(`Wak Wak Wak\nAnswered ${count} questions!`);
+    alert(`GAME OVER\nAnswered ${count} questions!`);
     this.setState({ inGame: false, count: -1 });
   };
 
-  toggleAbout = () => {
-    const { about, color } = this.state;
-    let rndColorIndex, newColor;
-    if (about) {
-      rndColorIndex = Math.floor(Math.random() * COLORS.length);
-      newColor = COLORS[rndColorIndex];
+  onAbout = () => {
+    const { isAbout, color } = this.state;
+    let num, newColor;
+    if (isAbout) {
+      num = this._getRandomNum(COLORS.length);
+      newColor = COLORS[num];
     }
-    this.setState({ about: !about, color: about ? newColor : color });
+    this.setState({ isAbout: !isAbout, color: newColor || color });
   };
 
-  openMail = () => window.open('mailto:yogevshlomovitz@gmail.com?subject=Quicky');
+  onMail = () => window.open(MAIL_TO);
 
-  renderDrawer = () => {
-    const { about } = this.state;
+  renderAbout = () => {
+    const { isAbout } = this.state;
     return (
-      <Drawer anchor="bottom" open={about} onClose={this.toggleAbout}>
+      <Drawer anchor="bottom" open={isAbout} onClose={this.onAbout}>
         <div dir="rtl" className="about">
           <div className="instructions">
             <Typography variant="subtitle1">
@@ -71,10 +68,10 @@ class App extends React.Component {
             </Typography>
           </div>
           <Typography variant="subtitle1">
-            <IconButton onClick={this.openMail} style={{ color: 'white' }}>
+            <IconButton onClick={this.onMail} style={{ color: 'white' }}>
               <MailOutline />
             </IconButton>
-            <a href={'https://github.com/yogevitz/quicky'}>
+            <a href={GITHUB_LINK}>
               <IconButton style={{ color: 'white' }}>
                 <GitHub />
               </IconButton>
@@ -89,7 +86,7 @@ class App extends React.Component {
     const { inGame, question, color, count } = this.state;
     return (
       <div className="App" style={{ backgroundColor: color }}>
-        {this.renderDrawer()}
+        {this.renderAbout()}
         <header className="App-header">
           <img
             height="197px"
@@ -110,12 +107,12 @@ class App extends React.Component {
                 <div className="buttons">
                   <Grid container spacing={3} alignItems="center" justify="center">
                     <Grid item xs={12}>
-                      <Button onClick={this.next} variant="contained" color="primary" size="large">
+                      <Button onClick={this.onNext} variant="contained" color="primary" size="large">
                         Next
                       </Button>
                     </Grid>
                     <Grid item xs={12}>
-                      <Button onClick={this.fail} variant="contained" color="secondary" size="medium">
+                      <Button onClick={this.onFail} variant="contained" color="secondary" size="medium">
                         Fail
                       </Button>
                     </Grid>
@@ -123,12 +120,12 @@ class App extends React.Component {
                 </div>
               </React.Fragment>
             ) : (
-              <Button onClick={this.start} variant="contained" color="primary" size="large">
+              <Button onClick={this.onStart} variant="contained" color="primary" size="large">
                 Start
               </Button>
             )}
             <p>
-              <IconButton onClick={this.toggleAbout} style={{ color: 'white' }}>
+              <IconButton onClick={this.onAbout} style={{ color: 'white' }}>
                 <InfoOutlined />
               </IconButton>
             </p>
@@ -137,6 +134,8 @@ class App extends React.Component {
       </div>
     );
   }
+
+  _getRandomNum = (max: number) => Math.floor(Math.random() * max);
 }
 
 export default App;
