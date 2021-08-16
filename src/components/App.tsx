@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from '../assets/logo.png';
-import questions from '../assets/questions.json';
-import { COLORS, GITHUB_LINK, MAIL_TO } from '../constants';
+import QUESTIONS from '../assets/questions.json';
+import { getRandomNum } from '../utils';
+import { COLORS, GITHUB_LINK, MAIL_TO, NUM_OF_QUESTIONS } from '../constants';
 import { Drawer, Button, Typography, IconButton, Grid } from '@material-ui/core';
 import { GitHub, MailOutline, InfoOutlined } from '@material-ui/icons';
 import './App.css';
@@ -9,13 +10,11 @@ import './App.css';
 class App extends React.Component {
   state = {
     inGame: false,
+    questions: [...QUESTIONS],
     question: null,
     isAbout: false,
     color: COLORS[0],
-    count: -1,
   };
-
-  asked: number[] = [];
 
   onStart = () => {
     this.setState({ inGame: true });
@@ -23,27 +22,24 @@ class App extends React.Component {
   };
 
   onNext = () => {
-    const { count } = this.state;
-    let num = this._getRandomNum(questions.length);
-    while (this.asked.includes(num)) {
-      num = this._getRandomNum(questions.length);
-    }
-    this.asked.push(num);
+    const { questions } = this.state;
+    let num = getRandomNum(questions.length);
     const question: string = questions[num];
-    this.setState({ question, count: count + 1 });
+    questions.splice(num, 1);
+    this.setState({ questions, question });
   };
 
   onFail = () => {
-    const { count } = this.state;
-    alert(`GAME OVER\nAnswered ${count} questions!`);
-    this.setState({ inGame: false, count: -1 });
+    const { questions } = this.state
+    alert(`GAME OVER\nAnswered ${NUM_OF_QUESTIONS - questions.length} questions!`);
+    this.setState({ inGame: false, questions: [...QUESTIONS] });
   };
 
   onAbout = () => {
     const { isAbout, color } = this.state;
     let num, newColor;
     if (isAbout) {
-      num = this._getRandomNum(COLORS.length);
+      num = getRandomNum(COLORS.length);
       newColor = COLORS[num];
     }
     this.setState({ isAbout: !isAbout, color: newColor || color });
@@ -82,8 +78,50 @@ class App extends React.Component {
     );
   };
 
+  renderMainMenu = () => (
+    <Button onClick={this.onStart} variant="contained" color="primary" size="large">
+      Start
+    </Button>
+  );
+
+  renderGame = () => {
+    const { questions, question } = this.state;
+    return (
+      <>
+        <Typography variant="subtitle1">
+          <b>{NUM_OF_QUESTIONS - questions.length}</b>
+        </Typography>
+        <div dir="rtl" className="question">
+          <p>{question}</p>
+        </div>
+        <div className="buttons">
+          <Grid container spacing={3} alignItems="center" justify="center">
+            <Grid item xs={12}>
+              <Button onClick={this.onNext} variant="contained" color="primary" size="large">
+                Next
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button onClick={this.onFail} variant="contained" color="secondary" size="medium">
+                Fail
+              </Button>
+            </Grid>
+          </Grid>
+        </div>
+      </>
+    );
+  };
+
+  renderFooter = () => (
+    <p>
+      <IconButton onClick={this.onAbout} style={{ color: 'white' }}>
+        <InfoOutlined />
+      </IconButton>
+    </p>
+  );
+
   render() {
-    const { inGame, question, color, count } = this.state;
+    const { inGame, color } = this.state;
     return (
       <div className="App" style={{ backgroundColor: color }}>
         {this.renderAbout()}
@@ -96,46 +134,15 @@ class App extends React.Component {
             alt="logo"
           />
           <div>
-            {inGame ? (
-              <React.Fragment>
-                <Typography variant="subtitle1">
-                  <b>{count}</b>
-                </Typography>
-                <div dir="rtl" className="question">
-                  <p>{question}</p>
-                </div>
-                <div className="buttons">
-                  <Grid container spacing={3} alignItems="center" justify="center">
-                    <Grid item xs={12}>
-                      <Button onClick={this.onNext} variant="contained" color="primary" size="large">
-                        Next
-                      </Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button onClick={this.onFail} variant="contained" color="secondary" size="medium">
-                        Fail
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </div>
-              </React.Fragment>
-            ) : (
-              <Button onClick={this.onStart} variant="contained" color="primary" size="large">
-                Start
-              </Button>
-            )}
-            <p>
-              <IconButton onClick={this.onAbout} style={{ color: 'white' }}>
-                <InfoOutlined />
-              </IconButton>
-            </p>
+            {inGame
+              ? this.renderGame()
+              : this.renderMainMenu()}
+            {this.renderFooter()}
           </div>
         </header>
       </div>
     );
   }
-
-  _getRandomNum = (max: number) => Math.floor(Math.random() * max);
 }
 
 export default App;
